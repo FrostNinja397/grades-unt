@@ -220,6 +220,12 @@ export default function SearchBar({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     const items = allItems();
+    if (e.key === "Enter" && isOpen && !loading && !error && items.length === 0 && hasQuery) {
+      e.preventDefault();
+      setIsOpen(false);
+      router.push(`/search?query=${encodeURIComponent(debouncedQuery.trim())}`);
+      return;
+    }
     if (!isOpen || items.length === 0) return;
 
     if (e.key === "ArrowDown") {
@@ -408,11 +414,6 @@ export default function SearchBar({
       {isOpen && !loading && error && hasQuery && (
         <div className={`absolute z-50 mt-2 w-full rounded-2xl border p-4 text-center text-sm text-red-600 shadow-xl dark:text-red-300 ${compact ? "border-jungle-tan-dark/30 bg-jungle-tan-light dark:border-green-800/50 dark:bg-jungle-canopy" : "glass-glossy border-white/40 dark:border-white/15"}`}>
           Could not load search results. Please try again.
-        </div>
-      )}
-      {isOpen && !loading && !error && items.length === 0 && hasQuery && (
-        <div className={`absolute z-50 mt-2 w-full rounded-2xl border p-4 text-center text-sm text-gray-500 shadow-xl dark:text-green-200/70 ${compact ? "border-jungle-tan-dark/30 bg-jungle-tan-light dark:border-green-800/50 dark:bg-jungle-canopy" : "glass-glossy border-white/40 dark:border-white/15"}`}>
-          No results found for &ldquo;{debouncedQuery}&rdquo;
         </div>
       )}
     </div>
