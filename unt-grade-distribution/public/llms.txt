@@ -1,0 +1,25 @@
+# grades-unt
+
+> UNT grade distributions by course and instructor.
+
+Website: https://untgrades.app
+
+## MCP server
+
+- Endpoint: https://untgrades.app/api/mcp
+- Protocol: MCP Streamable HTTP, hosted by the Next.js app on Vercel.
+- Data: deployed encrypted course and instructor data.
+- Configuration: set `NEXT_PUBLIC_DATA_KEY` in the Vercel project to the key used to encrypt the deployed data.
+
+### Tools
+
+- `search_grades`: search by course code, title, or instructor name. Input: `query`.
+- `get_course_grades`: read section grades and course aggregates. Inputs: `prefix`, `number`; optional `offset` and `limit`.
+- `get_instructor_courses`: list courses for an exact instructor name. Inputs: `firstName`, `lastName`; optional `offset` and `limit`.
+
+Pagination defaults to offset `0` and limit `25`. The maximum limit is `50`.
+
+## Documentation
+
+- [Repository overview](https://github.com/dyl-joseph/grades-unt/blob/main/README.md)
+- [Application setup and MCP details](https://github.com/dyl-joseph/grades-unt/blob/main/unt-grade-distribution/README.md)
