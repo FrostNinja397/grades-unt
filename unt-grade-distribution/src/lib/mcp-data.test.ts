@@ -29,7 +29,7 @@ const fixtureCourses = [
         {
           sectionNumber: "002",
           instructor: { firstName: "Ada", lastName: "Lovelace" },
-          year: "2025",
+          year: "2026",
           term: "Spring",
           grades: { A: 1, B: 3, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
         },
@@ -57,6 +57,52 @@ const fixtureCourses = [
           year: "2024",
           term: "Fall",
           grades: { A: 2, B: 2, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+        },
+      ],
+    } satisfies EncryptedCourse,
+  },
+  {
+    id: `${"c".repeat(32)}.bin`,
+    tokens: ["PHYS 1410", "MECHANICS", "Curie,Marie"],
+    course: {
+      prefix: "PHYS",
+      number: "1410",
+      title: "MECHANICS",
+      sections: [
+        {
+          sectionNumber: "001",
+          instructor: { firstName: "Marie", lastName: "Curie" },
+          year: "2026",
+          term: "Summer",
+          grades: { A: 1, B: 0, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+        },
+        {
+          sectionNumber: "002",
+          instructor: { firstName: "Marie", lastName: "Curie" },
+          year: "2026",
+          term: "Winter",
+          grades: { A: 1, B: 0, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+        },
+        {
+          sectionNumber: "003",
+          instructor: { firstName: "Marie", lastName: "Curie" },
+          year: "2026",
+          term: "Fall",
+          grades: { A: 1, B: 0, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+        },
+        {
+          sectionNumber: "004",
+          instructor: { firstName: "Marie", lastName: "Curie" },
+          year: "2026",
+          term: "Maymester",
+          grades: { A: 1, B: 0, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+        },
+        {
+          sectionNumber: "005",
+          instructor: { firstName: "Marie", lastName: "Curie" },
+          year: "2026",
+          term: "Spring",
+          grades: { A: 1, B: 0, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
         },
       ],
     } satisfies EncryptedCourse,
@@ -149,11 +195,11 @@ test("course reads decrypt grade data, drop empty sections, and paginate", async
       gpa: 3.5,
       sections: [
         {
-          sectionNumber: "001",
+          sectionNumber: "002",
           instructor: { firstName: "Ada", lastName: "Lovelace" },
-          year: "2025",
-          term: "Fall",
-          grades: { A: 3, B: 1, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+          year: "2026",
+          term: "Spring",
+          grades: { A: 1, B: 3, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
         },
       ],
     });
@@ -162,13 +208,26 @@ test("course reads decrypt grade data, drop empty sections, and paginate", async
     assert.equal(secondPage?.nextOffset, null);
     assert.deepEqual(secondPage?.sections, [
       {
-        sectionNumber: "002",
+        sectionNumber: "001",
         instructor: { firstName: "Ada", lastName: "Lovelace" },
         year: "2025",
-        term: "Spring",
-        grades: { A: 1, B: 3, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+        term: "Fall",
+        grades: { A: 3, B: 1, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
       },
     ]);
+  } finally {
+    await fixture.close();
+  }
+});
+
+test("course sections sort newest semester first within a year", async () => {
+  const fixture = await createFixture(dataKey);
+  try {
+    const course = await fixture.dataSource.getCourse("PHYS", "1410", 0, 10);
+    assert.deepEqual(
+      course?.sections.map(({ term }) => term),
+      ["Fall", "Summer", "Maymester", "Spring", "Winter"]
+    );
   } finally {
     await fixture.close();
   }
