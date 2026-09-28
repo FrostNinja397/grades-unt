@@ -223,11 +223,10 @@ export function findInstructorEntries(manifest: ManifestEntry[], firstName: stri
     .map(({ entry }) => entry);
 }
 
-export async function searchManifest(q: string) {
+export function searchManifestEntries(manifest: ManifestEntry[], q: string) {
   const query = normalizeText(q);
   if (query.length < 2) return { courses: [], instructors: [] as Array<{ id: string; firstName: string; lastName: string }> };
 
-  const manifest = await fetchManifest();
   const compactQuery = compactCourseCode(query);
   const instructorQuery = query.replace(/\s*,\s*/g, ",");
 
@@ -298,6 +297,11 @@ export async function searchManifest(q: string) {
   }));
 
   return { courses, instructors };
+}
+
+export async function searchManifest(q: string) {
+  if (normalizeText(q).length < 2) return { courses: [], instructors: [] as Array<{ id: string; firstName: string; lastName: string }> };
+  return searchManifestEntries(await fetchManifest(), q);
 }
 
 export async function loadCourseByCode(prefix: string, number: string, passphrase?: string): Promise<EncryptedCourse | null> {

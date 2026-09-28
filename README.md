@@ -16,6 +16,10 @@ The public website reads from **encrypted static data stored with the deployed s
 - Client-side WebCrypto decrypts the blob with `NEXT_PUBLIC_DATA_KEY`.
 - Prisma/Postgres still exists for import, validation, migrations, and backend/API compatibility work, but it is not the primary user-facing read path.
 
+## MCP access for agents
+
+The Vercel deployment exposes a read-only Streamable HTTP MCP endpoint at [`https://untgrades.app/api/mcp`](https://untgrades.app/api/mcp). Configure an MCP client to connect to that URL. See the [application README](unt-grade-distribution/README.md#mcp-server) for tool inputs and setup.
+
 ## Technical implementation
 
 ### Frontend

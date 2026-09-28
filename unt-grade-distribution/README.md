@@ -13,6 +13,18 @@ The public app uses encrypted static files served from `public/encrypted/`:
 
 Prisma/Postgres is still supported for data import, migrations, validation, and backend/API compatibility routes, but normal user-facing course and instructor page reads should stay on the encrypted static-data path.
 
+## MCP server
+
+The Vercel deployment exposes a read-only Streamable HTTP MCP endpoint at `https://untgrades.app/api/mcp`. Configure this URL as a remote MCP server in your client's MCP settings. The endpoint reads the deployed encrypted data and uses `NEXT_PUBLIC_DATA_KEY`, the same value used to encrypt the files.
+
+Set `NEXT_PUBLIC_DATA_KEY` in the Vercel project to the value used for the deployed data, then redeploy the app. The endpoint provides these tools:
+
+- `search_grades` accepts a `query` with at least two characters and returns matching courses and instructors.
+- `get_course_grades` accepts a course `prefix` and `number`. Optional `offset` and `limit` fields page through sections. The default page size is 25, and the maximum is 50.
+- `get_instructor_courses` accepts an exact `firstName` and `lastName`. Optional `offset` and `limit` fields page through that instructor's courses. The default page size is 25, and the maximum is 50.
+
+Course results include section grade counts, aggregate counts, and GPA. GPA uses A through F grades. MCP clients send Streamable HTTP requests with POST.
+
 ## Getting started
 
 ```bash
