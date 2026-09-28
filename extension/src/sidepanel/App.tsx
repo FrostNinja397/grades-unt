@@ -1,7 +1,9 @@
-import { useState, useCallback } from "react";
+import { lazy, Suspense, useState, useCallback } from "react";
+import DetailErrorBoundary from "./DetailErrorBoundary";
 import SearchView from "./components/SearchView";
-import CourseDetail from "./components/CourseDetail";
-import InstructorDetail from "./components/InstructorDetail";
+
+const CourseDetail = lazy(() => import("./components/CourseDetail"));
+const InstructorDetail = lazy(() => import("./components/InstructorDetail"));
 
 type View =
   | { type: "search" }
@@ -28,20 +30,36 @@ export default function App() {
       {view.type === "search" && (
         <SearchView onCourseSelect={goToCourse} onInstructorSelect={goToInstructor} />
       )}
-      {view.type === "course" && (
-        <CourseDetail
-          prefix={view.prefix}
-          number={view.number}
+      {view.type !== "search" && (
+        <DetailErrorBoundary
+          key={view.type}
           onBack={goToSearch}
-          onInstructorSelect={goToInstructor}
-        />
-      )}
-      {view.type === "instructor" && (
-        <InstructorDetail
-          id={view.id}
-          onBack={goToSearch}
-          onCourseSelect={goToCourse}
-        />
+          onReload={() => window.location.reload()}
+        >
+          <Suspense
+            fallback={
+              <div style={{ padding: 24, textAlign: "center", color: "#999" }}>
+                Loading...
+              </div>
+            }
+          >
+            {view.type === "course" && (
+              <CourseDetail
+                prefix={view.prefix}
+                number={view.number}
+                onBack={goToSearch}
+                onInstructorSelect={goToInstructor}
+              />
+            )}
+            {view.type === "instructor" && (
+              <InstructorDetail
+                id={view.id}
+                onBack={goToSearch}
+                onCourseSelect={goToCourse}
+              />
+            )}
+          </Suspense>
+        </DetailErrorBoundary>
       )}
     </div>
   );
