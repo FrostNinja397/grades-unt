@@ -37,6 +37,12 @@ const blobMetaSchema = z.object({
   iterations: z.number().int().positive(),
 });
 
+const termOrder = ["Winter", "Spring", "Summer", "Fall"];
+
+function sectionRecency({ year, term }: { year: string | null; term: string | null }) {
+  return Number(year ?? 0) * 10 + termOrder.indexOf(term ?? "") + 1;
+}
+
 function coursePath(prefix: string, number: string) {
   return `/course/${encodeURIComponent(prefix)}/${encodeURIComponent(number)}`;
 }
@@ -105,7 +111,9 @@ export function createGradeDataSource(directory: string, dataKey: () => string |
       if (!entry) return null;
 
       const course = await readCourse(entry.id);
-      const sections = course.sections.filter(sectionHasGrades);
+      const sections = course.sections
+        .filter(sectionHasGrades)
+        .sort((a, b) => sectionRecency(b) - sectionRecency(a));
       const totals = aggregateGrades(sections.map(({ grades }) => ({
         gradeA: grades.A, gradeB: grades.B, gradeC: grades.C, gradeD: grades.D,
         gradeF: grades.F, gradeP: grades.P, gradeNP: grades.NP, gradeW: grades.W,

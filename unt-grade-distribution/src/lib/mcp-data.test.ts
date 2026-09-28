@@ -29,7 +29,7 @@ const fixtureCourses = [
         {
           sectionNumber: "002",
           instructor: { firstName: "Ada", lastName: "Lovelace" },
-          year: "2025",
+          year: "2026",
           term: "Spring",
           grades: { A: 1, B: 3, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
         },
@@ -149,11 +149,11 @@ test("course reads decrypt grade data, drop empty sections, and paginate", async
       gpa: 3.5,
       sections: [
         {
-          sectionNumber: "001",
+          sectionNumber: "002",
           instructor: { firstName: "Ada", lastName: "Lovelace" },
-          year: "2025",
-          term: "Fall",
-          grades: { A: 3, B: 1, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+          year: "2026",
+          term: "Spring",
+          grades: { A: 1, B: 3, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
         },
       ],
     });
@@ -162,11 +162,11 @@ test("course reads decrypt grade data, drop empty sections, and paginate", async
     assert.equal(secondPage?.nextOffset, null);
     assert.deepEqual(secondPage?.sections, [
       {
-        sectionNumber: "002",
+        sectionNumber: "001",
         instructor: { firstName: "Ada", lastName: "Lovelace" },
         year: "2025",
-        term: "Spring",
-        grades: { A: 1, B: 3, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
+        term: "Fall",
+        grades: { A: 3, B: 1, C: 0, D: 0, F: 0, P: 0, NP: 0, W: 0, I: 0 },
       },
     ]);
   } finally {
