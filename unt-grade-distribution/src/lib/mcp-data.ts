@@ -7,6 +7,7 @@ import {
   sectionHasGrades,
 } from "./encryptedData";
 import { aggregateGrades, calculateGPA } from "./grades";
+import { compareSemesterLabels, semesterLabel } from "./semester";
 
 const manifestSchema = z.array(z.object({
   id: z.string().regex(/^[0-9a-f]{32}\.bin$/),
@@ -36,12 +37,6 @@ const blobMetaSchema = z.object({
   salt: z.string(),
   iterations: z.number().int().positive(),
 });
-
-const termOrder = ["Winter", "Spring", "Summer", "Fall"];
-
-function sectionRecency({ year, term }: { year: string | null; term: string | null }) {
-  return Number(year ?? 0) * 10 + termOrder.indexOf(term ?? "") + 1;
-}
 
 function coursePath(prefix: string, number: string) {
   return `/course/${encodeURIComponent(prefix)}/${encodeURIComponent(number)}`;
@@ -113,7 +108,7 @@ export function createGradeDataSource(directory: string, dataKey: () => string |
       const course = await readCourse(entry.id);
       const sections = course.sections
         .filter(sectionHasGrades)
-        .sort((a, b) => sectionRecency(b) - sectionRecency(a));
+        .sort((a, b) => compareSemesterLabels(semesterLabel(a), semesterLabel(b)));
       const totals = aggregateGrades(sections.map(({ grades }) => ({
         gradeA: grades.A, gradeB: grades.B, gradeC: grades.C, gradeD: grades.D,
         gradeF: grades.F, gradeP: grades.P, gradeNP: grades.NP, gradeW: grades.W,
