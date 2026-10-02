@@ -9,7 +9,7 @@ import {
   recordSearchSkip,
 } from "@/lib/metrics";
 import { validateExtensionOrigin } from "@/lib/cors";
-import { NO_STORE_HEADERS } from "@/lib/rate-limit";
+import { NO_STORE_HEADERS } from "@/lib/no-store";
 
 /* ── In-memory LRU cache ─────────────────────────────── */
 const MAX_ENTRIES = 500;
