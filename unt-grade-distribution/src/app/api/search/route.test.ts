@@ -74,3 +74,16 @@ test("search route leaves quota charging to proxy (no duplicate charge)", async 
   assert.equal(response.status, 200);
   assert.equal(response.headers.has("x-ratelimit-remaining"), false);
 });
+
+test("search route failures are not CDN-cacheable and do not leak database errors", async (t) => {
+  process.env.DATABASE_URL ??= "postgresql://ci:ci@localhost:5432/ci";
+  process.env.DIRECT_URL ??= process.env.DATABASE_URL;
+  // The CI database URL has no server behind it, so the query itself fails.
+  t.mock.method(console, "error", () => undefined);
+  const { GET } = await import("./route");
+
+  const response = await GET(new NextRequest("https://example.test/api/search?q=zz-failure-probe"));
+  assert.equal(response.status, 500);
+  assert.match(response.headers.get("cache-control") ?? "", /no-store/);
+  assert.deepEqual(await response.json(), { error: "Database query failed" });
+});

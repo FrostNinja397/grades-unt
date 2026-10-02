@@ -19,7 +19,8 @@ export async function GET(
   const params = (await ctx.params) ?? {};
   const id = coerceRouteParam(params.id);
   const instructorId = Number(id);
-  if (isNaN(instructorId)) {
+  // Reject "", "1.5", "1e3", "Infinity", etc. before they reach Prisma's Int column.
+  if (!id || !/^\d+$/.test(id) || !Number.isSafeInteger(instructorId) || instructorId < 1) {
     return NextResponse.json({ sections: [] }, { status: 400 });
   }
   const instructor = await prisma.instructor.findUnique({
