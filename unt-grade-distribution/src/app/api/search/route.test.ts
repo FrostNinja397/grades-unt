@@ -3,6 +3,13 @@ import test from "node:test";
 import { NextRequest } from "next/server";
 import { buildSearchHeaders, getCourseSearchWhere, getInstructorSearchWhere, getSearchPlan, normalizeSearchQuery } from "@/lib/search";
 
+// lib/prisma reuses globalThis.prisma outside production; inject a client whose
+// queries fail so these tests never depend on whether a real database is reachable.
+const failingQuery = async () => { throw new Error("connect ECONNREFUSED 10.0.0.5:5432"); };
+Object.assign(globalThis, {
+  prisma: { course: { findMany: failingQuery }, instructor: { findMany: failingQuery } },
+});
+
 test("normalizeSearchQuery collapses whitespace and lowercases", () => {
   assert.equal(normalizeSearchQuery("  ACCT   2010  "), "acct 2010");
 });
@@ -76,9 +83,6 @@ test("search route leaves quota charging to proxy (no duplicate charge)", async 
 });
 
 test("search route failures are not CDN-cacheable and do not leak database errors", async (t) => {
-  process.env.DATABASE_URL ??= "postgresql://ci:ci@localhost:5432/ci";
-  process.env.DIRECT_URL ??= process.env.DATABASE_URL;
-  // The CI database URL has no server behind it, so the query itself fails.
   t.mock.method(console, "error", () => undefined);
   const { GET } = await import("./route");
 
