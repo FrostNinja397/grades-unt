@@ -149,6 +149,9 @@ test("changing the query cannot select suggestions from the previous query", asy
     button.textContent?.includes("Doe, Jane")
   );
   assert.ok(instructorButton);
+  for (const option of document.querySelectorAll<HTMLElement>('[role="option"]')) {
+    assert.equal(option.tabIndex, -1);
+  }
   await act(async () => instructorButton.click());
   await act(async () => document.getElementById("change-path")!.click());
 
@@ -163,6 +166,17 @@ test("changing the query cannot select suggestions from the previous query", asy
     button.textContent?.includes("ACCT 2010")
   );
   assert.ok(courseButton);
+  assert.equal(courseButton.tabIndex, -1);
+  assert.equal(input.getAttribute("role"), "combobox");
+  const listbox = document.getElementById(input.getAttribute("aria-controls")!);
+  assert.equal(listbox?.getAttribute("role"), "listbox");
+  await act(async () => {
+    input.dispatchEvent(new window.KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }));
+  });
+  const highlightedOption = document.getElementById(input.getAttribute("aria-activedescendant")!);
+  assert.equal(highlightedOption?.getAttribute("role"), "option");
+  assert.equal(highlightedOption?.getAttribute("aria-selected"), "true");
+  assert.ok(listbox?.contains(highlightedOption));
   await act(async () => courseButton.click());
 
   const courseLogBody = JSON.parse(String(searchLogRequests[1]?.body));
