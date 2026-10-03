@@ -504,23 +504,6 @@ div:has(> .semester-controls) {
 
 /* ── Home hero atmosphere ───────────────────────────── */
 
-/* Grade skyline: bars rise from the bottom edge and fade out toward the top. */
-.skyline-mask {
-  -webkit-mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
-  mask-image: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0.55) 45%, transparent 100%);
-}
-
-@keyframes skyline-breathe {
-  0%, 100% { transform: scaleY(1); }
-  50% { transform: scaleY(0.8); }
-}
-
-.skyline-bar {
-  background: var(--bar);
-  transform-origin: bottom;
-  animation: skyline-breathe var(--dur, 7s) ease-in-out var(--delay, 0s) infinite;
-}
-
 
 @keyframes vine-sway {
   0%, 100% { transform: rotate(-1.2deg); }
@@ -543,7 +526,6 @@ div:has(> .semester-controls) {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .skyline-bar,
   .vine-sway,
   .dapple {
     animation: none;

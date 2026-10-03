@@ -1,4 +1,4 @@
-import { countManifestInstructors, type ManifestEntry } from "./encryptedData";
+import type { ManifestEntry } from "./encryptedData";
 
 export type DepartmentSummary = {
   prefix: string;
@@ -7,7 +7,6 @@ export type DepartmentSummary = {
 
 export type ManifestSummary = {
   courses: number;
-  instructors: number;
   departments: DepartmentSummary[];
 };
 
@@ -51,7 +50,6 @@ export function summarizeManifest(manifest: ManifestEntry[]): ManifestSummary {
 
   return {
     courses: seen.size,
-    instructors: countManifestInstructors(manifest),
     departments,
   };
 }

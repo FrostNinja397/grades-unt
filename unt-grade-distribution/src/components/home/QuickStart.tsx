@@ -1,30 +1,33 @@
 import Link from "next/link";
 
-const CHIP_CLASS =
-  "rounded-full border border-jungle-tan-dark/40 bg-jungle-tan-light/70 px-3 py-1 text-sm font-medium text-jungle-bark transition-colors hover:border-primary/50 hover:text-primary dark:border-ui-border dark:bg-ui-surface dark:text-ui-text dark:hover:border-ui-accent dark:hover:text-ui-accent";
-
-const POPULAR_COURSES = [
-  { prefix: "ACCT", number: "2010", label: "ACCT 2010" },
-  { prefix: "BIOL", number: "1710", label: "BIOL 1710" },
-  { prefix: "CSCE", number: "1030", label: "CSCE 1030" },
-  { prefix: "ECON", number: "1110", label: "ECON 1110" },
-  { prefix: "ENGL", number: "1310", label: "ENGL 1310" },
-  { prefix: "MATH", number: "1710", label: "MATH 1710" },
-  { prefix: "PSYC", number: "1630", label: "PSYC 1630" },
+const COURSES = [
+  { prefix: "ACCT", number: "2010", title: "Account Prin I" },
+  { prefix: "CSCE", number: "1030", title: "Computer Science I" },
+  { prefix: "MATH", number: "1710", title: "Calculus I" },
+  { prefix: "BIOL", number: "1710", title: "Biol Sci Majors I" },
 ];
 
 export default function QuickStart() {
   return (
-    <nav aria-label="Popular courses" className="flex flex-wrap items-center justify-center gap-2">
-      <span className="mr-1 text-sm text-jungle-bark/70 dark:text-ui-muted">Try</span>
-      {POPULAR_COURSES.map((course) => (
-        <Link key={course.label} href={`/course/${course.prefix}/${course.number}`} className={CHIP_CLASS}>
-          {course.label}
-        </Link>
-      ))}
-      <a href="#departments" className={CHIP_CLASS}>
-        Browse departments <span aria-hidden="true">&darr;</span>
-      </a>
+    <nav aria-label="Example courses" className="flex flex-col items-center gap-3">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-jungle-vine dark:text-ui-accent">
+        Try a course
+      </p>
+      <ul className="flex flex-wrap justify-center gap-x-7 gap-y-3">
+        {COURSES.map((course) => (
+          <li key={`${course.prefix}-${course.number}`}>
+            <Link
+              href={`/course/${course.prefix}/${course.number}`}
+              className="block border-l-2 border-jungle-tan-dark pl-3 text-left transition-colors hover:border-primary dark:border-ui-border dark:hover:border-ui-accent"
+            >
+              <span className="block font-mono text-sm font-bold text-primary dark:text-ui-accent">
+                {course.prefix} {course.number}
+              </span>
+              <span className="block text-xs text-jungle-bark/70 dark:text-ui-muted">{course.title}</span>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 }

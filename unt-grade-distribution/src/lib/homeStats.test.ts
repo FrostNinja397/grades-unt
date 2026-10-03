@@ -16,11 +16,10 @@ const manifest = [
   entry("ACCT", "2010", ["Lee,Ann"]),
 ];
 
-test("summarizeManifest counts distinct courses, instructors and departments", () => {
+test("summarizeManifest counts distinct courses and departments", () => {
   const summary = summarizeManifest(manifest);
 
   assert.equal(summary.courses, 3);
-  assert.equal(summary.instructors, 2);
   assert.deepEqual(summary.departments, [
     { prefix: "ACCT", courses: 2 },
     { prefix: "CSCE", courses: 1 },

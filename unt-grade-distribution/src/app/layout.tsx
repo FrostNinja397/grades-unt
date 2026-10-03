@@ -7,7 +7,6 @@ import Providers from "@/components/Providers";
 import FallingLeaves from "@/components/FallingLeaves";
 import Starfield from "@/components/Starfield";
 import KofiWidget from "@/components/KofiWidget";
-import SiteFooter from "@/components/SiteFooter";
 import "./globals.css";
 
 const display = Bricolage_Grotesque({
@@ -63,7 +62,6 @@ export default function RootLayout({
         <Providers>
           <Navbar />
           <main className="relative z-20">{children}</main>
-          <SiteFooter />
         </Providers>
         <KofiWidget />
         <Analytics />
