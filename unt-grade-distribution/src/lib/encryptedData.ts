@@ -244,6 +244,14 @@ export function findInstructorEntries(manifest: ManifestEntry[], firstName: stri
     .map(({ entry }) => entry);
 }
 
+export function countManifestInstructors(manifest: ManifestEntry[]) {
+  const keys = new Set<string>();
+  for (const { instructors } of indexedManifest(manifest)) {
+    for (const instructor of instructors) keys.add(instructor.key);
+  }
+  return keys.size;
+}
+
 export function searchManifestEntries(manifest: ManifestEntry[], q: string) {
   const query = normalizeText(q);
   if (query.length < 2) return { courses: [], instructors: [] as Array<{ id: string; firstName: string; lastName: string }> };
