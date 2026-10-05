@@ -496,7 +496,7 @@ div:has(> .semester-controls) {
   opacity: 1;
 }
 
-/* A campus-editorial voice, scoped to the homepage. */
+/* Homepage interactions and layout. */
 .course-play-card {
   transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease;
 }
@@ -518,10 +518,6 @@ div:has(> .semester-controls) {
   .course-play-card { transition: none; }
 }
 
-.home-student {
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-}
-
 .home-student .home-page {
   min-height: auto;
   max-width: none;
@@ -541,7 +537,6 @@ div:has(> .semester-controls) {
 
 .home-student .home-title h1 {
   margin-top: 18px;
-  font-family: Georgia, "Times New Roman", serif;
   font-size: clamp(40px, 5.5vw, 72px);
   font-weight: 400;
   line-height: 1.08;
@@ -553,10 +548,6 @@ div:has(> .semester-controls) {
   font-weight: 400;
   line-height: 1.65;
   letter-spacing: normal;
-}
-
-.home-student .home-game-plan h2 {
-  font-family: Georgia, "Times New Roman", serif;
 }
 
 @media (max-width: 639px) {
