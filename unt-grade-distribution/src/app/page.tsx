@@ -14,7 +14,7 @@ export default function Home() {
           </p>
           <h1 className="mt-4 text-primary dark:text-ui-text">
             Find your classes.<br />
-            <em>Know what&apos;s ahead.</em>
+            <span>Know what&apos;s ahead.</span>
           </h1>
           <HomeWelcome />
         </div>
