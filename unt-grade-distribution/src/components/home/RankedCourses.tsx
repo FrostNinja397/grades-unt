@@ -12,7 +12,7 @@ const CARD_CLASS =
 function RankedList({ title, subtitle, courses }: { title: string; subtitle: string; courses: RankedCourse[] }) {
   return (
     <section className={CARD_CLASS}>
-      <h3 className="font-display text-xl font-semibold text-gray-900 dark:text-ui-text">{title}</h3>
+      <h2 className="text-xl font-semibold text-gray-900 dark:text-ui-text">{title}</h2>
       <p className="mb-3 text-sm text-gray-500 dark:text-ui-muted">{subtitle}</p>
       <ol className="divide-y divide-jungle-tan-dark/25 dark:divide-ui-border">
         {courses.map((course) => (
@@ -44,7 +44,7 @@ export default function RankedCourses() {
   const stats = useHomeStats();
   if (!stats || (stats.easiest.length === 0 && stats.hardest.length === 0)) return null;
 
-  const subtitle = `Intro courses (1000–2999) with ${stats.minStudents}+ graded students, all semesters`;
+  const subtitle = `Intro courses (1000–2999) with ${stats.minStudents}+ letter grades, all semesters`;
 
   return (
     <div className="grid gap-4 md:grid-cols-2">

@@ -33,12 +33,6 @@
   --color-jungle-tan-dark: #BBA882;
 }
 
-/* Fonts: next/font sets --font-figtree and --font-bricolage on <html> */
-@theme inline {
-  --font-sans: var(--font-figtree), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
-}
-
 /* Glossy glass effects */
 .glass-glossy {
   background: linear-gradient(
@@ -502,32 +496,76 @@ div:has(> .semester-controls) {
   opacity: 1;
 }
 
-/* ── Home hero atmosphere ───────────────────────────── */
-
-
-@keyframes vine-sway {
-  0%, 100% { transform: rotate(-1.2deg); }
-  50% { transform: rotate(1.4deg); }
+/* A campus-editorial voice, scoped to the homepage. */
+.course-play-card {
+  transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background-color 160ms ease;
 }
 
-.vine-sway {
-  transform-origin: top center;
-  animation: vine-sway 11s ease-in-out infinite;
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .course-play-card:hover:not(:disabled) {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 14px rgb(0 0 0 / 8%);
+  }
 }
 
-@keyframes dapple-drift {
-  0% { transform: translate3d(0, 0, 0) scale(1); opacity: 0.55; }
-  100% { transform: translate3d(2.5rem, 1.5rem, 0) scale(1.12); opacity: 0.9; }
-}
-
-.dapple {
-  background: radial-gradient(circle, rgba(255, 214, 120, 0.4) 0%, rgba(255, 214, 120, 0) 65%);
-  animation: dapple-drift 14s ease-in-out var(--delay, 0s) infinite alternate;
+@media (prefers-reduced-motion: no-preference) {
+  .course-play-card:active:not(:disabled) {
+    transform: translateY(1px) scale(0.98);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .vine-sway,
-  .dapple {
-    animation: none;
+  .course-play-card { transition: none; }
+}
+
+.home-student {
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+}
+
+.home-student .home-page {
+  min-height: auto;
+  max-width: none;
+  padding: 64px 24px 40px;
+  gap: 28px;
+}
+
+.home-student .home-title {
+  margin: 0;
+}
+
+.home-student .home-title > p.home-eyebrow {
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.home-student .home-title h1 {
+  margin-top: 18px;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(40px, 5.5vw, 72px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.035em;
+}
+
+.home-student .home-title > p:last-child {
+  font-size: 18px;
+  font-weight: 400;
+  line-height: 1.65;
+  letter-spacing: normal;
+}
+
+.home-student .home-game-plan h2 {
+  font-family: Georgia, "Times New Roman", serif;
+}
+
+@media (max-width: 639px) {
+  .home-student .home-page {
+    padding: 40px 20px 32px;
+    gap: 24px;
+  }
+
+  .home-student .home-title > p:last-child {
+    font-size: 16px;
   }
 }

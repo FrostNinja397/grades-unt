@@ -93,7 +93,7 @@ function manifestTokensForCourse(course) {
 
 const HOME_STATS_MIN_STUDENTS = 200;
 const HOME_STATS_LIST_SIZE = 6;
-const INTRO_COURSE_NUMBER = /^[12]\d{3}/;
+const INTRO_COURSE_NUMBER = /^[12]\d{3}$/;
 
 function sumGrades(sections) {
   const totals = Object.fromEntries(GRADE_COLUMNS.map((grade) => [grade, 0]));
@@ -126,18 +126,15 @@ function studentsFromTotals(totals) {
 
 // Aggregates only: no sections or instructors. Shown on the home page.
 function buildHomeStats(courses, minStudents = HOME_STATS_MIN_STUDENTS, listSize = HOME_STATS_LIST_SIZE) {
-  const departmentSections = new Map();
   const ranked = [];
 
   for (const course of courses) {
-    if (!departmentSections.has(course.prefix)) departmentSections.set(course.prefix, []);
-    departmentSections.get(course.prefix).push(...course.sections);
-
     if (!INTRO_COURSE_NUMBER.test(course.number)) continue;
     const totals = sumGrades(course.sections);
     const gpa = gpaFromTotals(totals);
     const students = studentsFromTotals(totals);
-    if (gpa === null || students < minStudents) continue;
+    const letterGrades = totals.A + totals.B + totals.C + totals.D + totals.F;
+    if (gpa === null || letterGrades < minStudents) continue;
 
     ranked.push({
       prefix: course.prefix,
@@ -154,17 +151,8 @@ function buildHomeStats(courses, minStudents = HOME_STATS_MIN_STUDENTS, listSize
   const easiest = [...ranked].sort((a, b) => b.gpa - a.gpa || b.students - a.students || byCode(a, b));
   const hardest = [...ranked].sort((a, b) => a.gpa - b.gpa || b.students - a.students || byCode(a, b));
 
-  const departments = {};
-  for (const [prefix, sections] of departmentSections) {
-    const totals = sumGrades(sections);
-    departments[prefix] = { avgGpa: gpaFromTotals(totals), students: studentsFromTotals(totals) };
-    const dist = distFromTotals(totals);
-    if (dist) departments[prefix].dist = dist;
-  }
-
   return {
     minStudents,
-    departments,
     easiest: easiest.slice(0, listSize),
     hardest: hardest.slice(0, listSize),
   };

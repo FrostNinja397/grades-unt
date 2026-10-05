@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 
@@ -103,17 +104,18 @@ test('home stats rank intro courses by GPA and ignore small or upper-level cours
   });
 });
 
-test('home stats compute department GPA from letter grades only', () => {
-  const { departments } = buildHomeStats([
-    course('AAAA', '1010', { A: 1, C: 1, W: 8 }),
-    course('AAAA', '4000', { B: 2 }),
-    course('PPPP', '1010', { P: 30 }),
+test('home rankings require enough letter grades and exactly four-digit intro numbers', () => {
+  const stats = buildHomeStats([
+    course('PASS', '1010', { A: 1, P: 400 }),
+    course('WITH', '1010', { A: 1, W: 400 }),
+    course('INCO', '1010', { A: 1, I: 400 }),
+    course('LONG', '10000', { A: 400 }),
+    course('VALID', '2999', { A: 100, B: 100, P: 50, W: 50 }),
   ]);
 
-  assert.deepEqual(departments.AAAA, {
-    avgGpa: 3,
-    students: 12,
-    dist: [8.3, 16.7, 8.3, 0, 0, 66.7],
-  });
-  assert.deepEqual(departments.PPPP, { avgGpa: null, students: 30 });
+  assert.deepEqual(stats.easiest.map((c) => c.prefix), ['VALID']);
+  assert.deepEqual(stats.hardest.map((c) => c.prefix), ['VALID']);
+  assert.equal(stats.easiest[0].gpa, 3.5);
+  assert.equal(stats.easiest[0].students, 300);
+  assert.equal(stats.easiest[0].dfwRate, 16.7);
 });
