@@ -212,6 +212,7 @@
 
 .dark .home-title h1 {
   margin-top: 12px;
+  font-family: Arial, Helvetica, sans-serif;
   font-weight: 600;
   font-size: clamp(40px, 6vw, 64px);
   color: var(--color-ui-text);
@@ -528,38 +529,9 @@ div:has(> .semester-controls) {
   margin: 0;
 }
 
-.home-student .home-title > p.home-eyebrow {
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-}
-
-.dark .home-student .home-title > p.home-eyebrow {
-  color: var(--color-ui-accent);
-}
-
-.home-student .home-title h1 {
-  margin-top: 18px;
-  font-size: clamp(40px, 5.5vw, 72px);
-  font-weight: 400;
-  line-height: 1.08;
-  letter-spacing: -0.035em;
-}
-
-.home-student .home-title > p:last-child {
-  font-size: 18px;
-  font-weight: 400;
-  line-height: 1.65;
-  letter-spacing: normal;
-}
-
 @media (max-width: 639px) {
   .home-student .home-page {
     padding: 40px 20px 32px;
     gap: 24px;
-  }
-
-  .home-student .home-title > p:last-child {
-    font-size: 16px;
   }
 }

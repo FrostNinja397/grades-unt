@@ -41,7 +41,7 @@ export default function QuickStart() {
   return (
     <nav aria-label="Example courses" className="flex flex-col items-center gap-3">
       <p className="text-sm font-semibold text-jungle-bark dark:text-ui-accent">
-        Just browsing? Start with a familiar class.
+        Try a course
       </p>
       <ul className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
         {COURSES.map((course) => (
